@@ -1,0 +1,10 @@
+[
+{
+    "model": "catalog.category",
+    "pk": 8,
+    "fields": {
+        "name": "Конфеты",
+        "description": "В наличии"
+    }
+}
+]
