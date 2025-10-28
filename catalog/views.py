@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
 
@@ -13,3 +14,11 @@ def contact(request):
         request,
         "contact.html",
     )
+
+
+def response(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        massage = request.POST.get("massage")
+        return HttpResponse(f"Спасибо, {name}! Ваше сообщение получено.")
+    return render(request, "contact.html")
