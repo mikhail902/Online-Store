@@ -1,10 +1,49 @@
 [
 {
     "model": "catalog.category",
-    "pk": 8,
+    "pk": 22,
     "fields": {
         "name": "Конфеты",
         "description": "В наличии"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 26,
+    "fields": {
+        "name": "Киндер",
+        "description": "Молочный шоколад",
+        "pic": "",
+        "category": 22,
+        "price": 200,
+        "created_at": null,
+        "updated_at": null
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 27,
+    "fields": {
+        "name": "Аленка",
+        "description": "Молочный шоколад",
+        "pic": "",
+        "category": 22,
+        "price": 100,
+        "created_at": null,
+        "updated_at": null
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 28,
+    "fields": {
+        "name": "MM",
+        "description": "Конфеты дражже",
+        "pic": "",
+        "category": 22,
+        "price": 150,
+        "created_at": null,
+        "updated_at": null
     }
 }
 ]
