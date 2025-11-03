@@ -1,6 +1,5 @@
 from django import template
 
-
 register = template.Library()
 
 
@@ -9,4 +8,4 @@ def media_filter(path):
     if path:
         return f"media/{path}"
     else:
-        return f'#'
+        return f"Ошибка вывода фотографии"
