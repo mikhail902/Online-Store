@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block content %}
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h1 class="card-title">Блог</h1>
+                        <a href="{% url 'blog:post_create' %}"
+                           class="btn btn-primary mb-4">
+                            Создать новую запись
+                        </a>
+
+                        {% for post in posts %}
+
+                        <div class="col">
+                        <div class="card shadow-sm">
+                         <a href="{% url 'blog:post_detail' post.pk %}"
+                                   class="text-decoration-none text-white fw-bold">
+                                    {{ post.title }}
+                                </a>
+                        <div class="card-body">
+
+                           <p class="text-muted mb-1">
+                                <small>
+                                    {{ post.created_at|default:"Еще не создан" }}
+                                </small>
+                            </p>
+                            <p class="text-muted mb-2">
+                                <small>
+                                    Просмотров: {{ post.views_count|default:0 }}
+                                </small>
+                            </p>
+
+                           <div class="btn-group" role="group">
+                                <a href="{% url 'blog:post_update' post.pk %}"
+                                   class="btn btn-outline-primary btn-sm">
+                                    Редактировать
+                                </a>
+                                <a href="{% url 'blog:post_delete' post.pk %}"
+                                   class="btn btn-outline-danger btn-sm">
+                                    Удалить
+                                </a>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+
+
+
+
+
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block content %}
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1">
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h1>{% if object %}Редактировать{% else %}Создать{% endif %} запись</h1>
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <button type="submit">Сохранить</button>
+                                </form>
+                                <a href="{% url 'blog:post_list' %}">Отмена</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
