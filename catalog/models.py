@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Category(models.Model):
-
     name = models.CharField(
         verbose_name="Категория", help_text="Введите категорию продукта", max_length=50
     )

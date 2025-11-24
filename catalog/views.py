@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import View, TemplateView, ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import View, TemplateView, ListView, DetailView, UpdateView, CreateView
 
+from catalog.forms import ProductForm
 from catalog.models import Product
 
 
@@ -13,6 +15,11 @@ class HomeView(TemplateView):
 class ContactView(TemplateView):
     """CBV для страницы контактов"""
     template_name = "contact.html"
+
+
+class FormView(TemplateView):
+    """CBV для страницы контактов"""
+    template_name = "product_form.html"
 
 
 class ContactResponseView(View):
@@ -42,3 +49,17 @@ class ProductDetailView(DetailView):
 
     def get_object(self, queryset=None):
         return get_object_or_404(Product, pk=self.kwargs['pk'])
+
+
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "product_form.html"
+    success_url = reverse_lazy("Product:create_product")
+
+
+class ProductsUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "product_form.html"
+    success_url = reverse_lazy("catalog:update_product")

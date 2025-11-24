@@ -6,29 +6,29 @@
     <div class="container">
         <div class="row row-cols-1">
             <!-- Карточка товара -->
-                <div class="col">
-                    <div class="card shadow-sm">
-                        <img src="{{ products.pic | media_filter }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ products.name }}</h5>
-                            <p class="card-text">
-                                {{ products.description|truncatechars:100 }}
-                            </p>
-                            <p class="card-text fw-bold">
-                                {{ products.price }}₽
-                            </p>
-                                <p class="text-body-secondary">
-                            {{products.created_at|default:"Дата производства отсутствует"}}
-                                </p>
-                                <p class="text-body-secondary">
-                            {{products.updated_at|default:"Дата изменения отсутствует"}}
-                                </p>
-                            <div class="d-flex justify-content-between align-items-center">
-                            </div>
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="{{ object.pic | media_filter }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ object.name }}</h5>
+                        <p class="card-text">
+                            {{ object.description|truncatechars:100 }}
+                        </p>
+                        <p class="card-text fw-bold">
+                            {{ object.price }}₽
+                        </p>
+                        <p class="text-body-secondary">
+                            {{object.created_at|default:"Дата производства отсутствует"}}
+                        </p>
+                        <p class="text-body-secondary">
+                            {{object.updated_at|default:"Дата изменения отсутствует"}}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
