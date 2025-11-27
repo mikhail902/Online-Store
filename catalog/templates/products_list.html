@@ -16,7 +16,6 @@
                         <p class="card-text fw-bold">
                             {{ product.price }}₽
                         </p>
-
                         <a class="btn btn-primary" href="{% url 'main:single_product' product.pk %}" role="button">Смотреть</a>
                         <button type="button" class="btn btn-secondary">Изменить</button>
                         <a class="btn btn-primary" href="{% url 'main:delete_product' product.pk %}" role="button">Удалить</a>
