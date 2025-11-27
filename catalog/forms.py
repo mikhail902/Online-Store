@@ -77,3 +77,6 @@ class ProductForm(forms.ModelForm):
         description = self.cleaned_data.get("description")
         self.check_forbidden_words(description, "Описание")
         return description
+
+
+

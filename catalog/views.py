@@ -7,7 +7,7 @@ from django.views.generic import (
     ListView,
     DetailView,
     UpdateView,
-    CreateView,
+    CreateView, DeleteView,
 )
 
 from catalog.forms import ProductForm
@@ -75,3 +75,9 @@ class ProductsUpdateView(UpdateView):
     form_class = ProductForm
     template_name = "product_form.html"
     success_url = reverse_lazy("catalog:update_product")
+
+
+class ProductsDeleteView(DeleteView):
+    model = Product
+    template_name = "product_confirm_delete.html"
+    success_url = reverse_lazy("catalog:delete_product")
