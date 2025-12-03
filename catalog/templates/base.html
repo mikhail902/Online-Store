@@ -168,9 +168,11 @@
 </div>
 
 <!-- Header -->
+{% if user.is_authenticated %}
 <header data-bs-theme="dark">
     {% include 'includes/menu.html' %}
 </header>
+{% endif %}
 
 <!-- Main Content -->
 <main>
@@ -182,9 +184,15 @@
                     Самые свежие продукты
                 </p>
                 <p>
-                    <a href="#" class="btn btn-primary my-2">Регистрация</a>
-                    <a href="#" class="btn btn-secondary my-2">Вход</a>
+
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'users:logout' %}" class="btn btn-secondary my-2">Выход</a>
                     <a href="{% url 'main:create_product' %}" class="btn btn-secondary my-2">Добавить продукт</a>
+                    {% else %}
+                    <a href="{% url 'users:login' %}" class="btn btn-secondary my-2">Вход</a>
+                    <a href="{% url 'users:register' %}" class="btn btn-primary my-2">Регистрация</a>
+                    {% endif %}
+
                 </p>
             </div>
         </div>
