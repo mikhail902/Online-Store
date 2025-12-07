@@ -187,7 +187,9 @@
 
                     {% if user.is_authenticated %}
                     <a href="{% url 'users:logout' %}" class="btn btn-secondary my-2">Выход</a>
+                    {% if user.is_authenticated %}
                     <a href="{% url 'main:create_product' %}" class="btn btn-secondary my-2">Добавить продукт</a>
+                    {% endif %}
                     {% else %}
                     <a href="{% url 'users:login' %}" class="btn btn-secondary my-2">Вход</a>
                     <a href="{% url 'users:register' %}" class="btn btn-primary my-2">Регистрация</a>
