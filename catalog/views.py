@@ -1,17 +1,12 @@
-from django.http import HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views.generic import (
-    View,
-    TemplateView,
-    ListView,
-    DetailView,
-    UpdateView,
-    CreateView,
-    DeleteView,
-)
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  TemplateView, UpdateView, View)
 
-from catalog.forms import ProductForm
+from catalog.forms import ProductForm, ProductModeratorForm
 from catalog.models import Product
 
 
@@ -53,7 +48,7 @@ class ProductListView(ListView):
     context_object_name = "products"
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(DetailView, LoginRequiredMixin):
     """CBV для детального просмотра продукта"""
 
     model = Product
@@ -64,21 +59,50 @@ class ProductDetailView(DetailView):
         return get_object_or_404(Product, pk=self.kwargs["pk"])
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(CreateView, LoginRequiredMixin):
     model = Product
     form_class = ProductForm
     template_name = "product_form.html"
     success_url = reverse_lazy("catalog:create_product")
 
+    def form_valid(self, form):
+        product = form.save()
+        user = self.request.user
+        product.owner = user
+        product.save()
+        return super().form_valid(form)
 
-class ProductsUpdateView(UpdateView):
+
+class ProductsUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = "product_form.html"
     success_url = reverse_lazy("catalog:update_product")
+
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.owner:
+            return ProductForm
+        if user.has_perm("user.can_unpublish_product") and user.has_perm(
+            "user.delete_product"
+        ):
+            return ProductModeratorForm
+        raise PermissionDenied
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.owner:
+            return get_object_or_404(Product, pk=self.kwargs["pk"])
+        raise HttpResponseForbidden
 
 
 class ProductsDeleteView(DeleteView):
     model = Product
     template_name = "product_confirm_delete.html"
     success_url = reverse_lazy("catalog:product_list")
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        if self.request.user == self.object.owner:
+            return get_object_or_404(Product, pk=self.kwargs["pk"])
+        raise HttpResponseForbidden

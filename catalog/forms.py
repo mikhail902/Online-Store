@@ -19,7 +19,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = "__all__"
+        exclude = ("owner", "status_published")
 
     def __init__(self, *args, **kwargs):
         super(ProductForm, self).__init__(*args, **kwargs)
@@ -77,3 +77,9 @@ class ProductForm(forms.ModelForm):
         description = self.cleaned_data.get("description")
         self.check_forbidden_words(description, "Описание")
         return description
+
+
+class ProductModeratorForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ["description", "category"]
