@@ -3,11 +3,14 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   TemplateView, UpdateView, View)
 
 from catalog.forms import ProductForm, ProductModeratorForm
-from catalog.models import Product
+from catalog.models import Category, Product
+from catalog.services import get_product_from_cache, get_products_by_category
 
 
 class HomeView(TemplateView):
@@ -47,6 +50,9 @@ class ProductListView(ListView):
     template_name = "products_list.html"
     context_object_name = "products"
 
+    def get_queryset(self):
+        return get_product_from_cache()
+
 
 class ProductDetailView(DetailView, LoginRequiredMixin):
     """CBV для детального просмотра продукта"""
@@ -54,6 +60,10 @@ class ProductDetailView(DetailView, LoginRequiredMixin):
     model = Product
     template_name = "single_display_product.html"
     context_object_name = "products"
+
+    @method_decorator(cache_page(60 * 15))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     def get_object(self, queryset=None):
         return get_object_or_404(Product, pk=self.kwargs["pk"])
@@ -106,3 +116,28 @@ class ProductsDeleteView(DeleteView):
         if self.request.user == self.object.owner:
             return get_object_or_404(Product, pk=self.kwargs["pk"])
         raise HttpResponseForbidden
+
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = "category_list.html"
+    context_object_name = "products"
+
+
+class CategoryProductsListView(DetailView):
+    model = Category
+    template_name = "category_products_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = self.get_object()
+
+        # Используем сервисную функцию
+        products = get_products_by_category(category.id)
+
+        context.update(
+            {
+                "products": products,
+            }
+        )
+        return context

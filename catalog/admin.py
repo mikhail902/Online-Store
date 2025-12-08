@@ -11,6 +11,7 @@ class ProdAdmin(admin.ModelAdmin):
         "name",
         "description",
     )
+    exclude = ("status_published",)
 
 
 @admin.register(Category)
